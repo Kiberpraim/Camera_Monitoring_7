@@ -68,4 +68,7 @@ dependencies {
 
     // Coil
     implementation("io.coil-kt:coil:2.4.0")
+
+    // Fragment ktx (Fragment from Kotlin)
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
 }
