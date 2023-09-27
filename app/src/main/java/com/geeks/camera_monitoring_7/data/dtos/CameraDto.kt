@@ -12,7 +12,7 @@ data class CameraDto(
     val favorites: Boolean,
     val name: String,
     val rec: Boolean,
-    val room: String,
+    val room: String = "",
     @SerializedName("snapshot")
     val image: String
 )

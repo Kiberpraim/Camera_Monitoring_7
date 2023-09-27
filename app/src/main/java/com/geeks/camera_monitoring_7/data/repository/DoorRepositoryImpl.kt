@@ -1,12 +1,14 @@
 package com.geeks.camera_monitoring_7.data.repository
 
 import com.geeks.camera_monitoring_7.data.local.db.DoorDao
+import com.geeks.camera_monitoring_7.data.local.remoute.HouseApiService
 import com.geeks.camera_monitoring_7.domain.models.DoorModel
 import com.geeks.camera_monitoring_7.domain.repository.DoorRepository
 import javax.inject.Inject
 
 class DoorRepositoryImpl @Inject constructor(
-    private val dao: DoorDao
+    private val dao: DoorDao,
+    private val houseApiService: HouseApiService,
 ) : DoorRepository {
     override suspend fun getAllDoors(): List<DoorModel> {
         TODO("Not yet implemented")

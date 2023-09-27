@@ -11,9 +11,9 @@ data class DoorDto(
     val id: Long,
     val favorites: Boolean,
     val name: String,
-    val room: String,
+    val room: String = "",
     @SerializedName("snapshot")
-    val image: String
+    val image: String = ""
 )
 
 fun DoorDto.toDomainModel() = DoorModel(id, favorites, name, room, image)
