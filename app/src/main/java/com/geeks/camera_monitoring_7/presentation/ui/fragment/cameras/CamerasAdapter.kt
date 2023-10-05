@@ -6,16 +6,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import coil.load
-import com.geeks.camera_monitoring_7.data.dtos.CameraDto
 import com.geeks.camera_monitoring_7.databinding.ItemCameraBinding
+import com.geeks.camera_monitoring_7.domain.models.CameraModel
 
 class CamerasAdapter(
-//    private val onItemClick: () -> Unit
 ) : Adapter<CamerasAdapter.CamerasViewHolder>() {
 
-    private var list: List<CameraDto> = listOf()
+    private var list: List<CameraModel> = listOf()
 
-    fun setList(newList: List<CameraDto>) {
+    fun setList(newList: List<CameraModel>) {
         list = newList
         notifyDataSetChanged()
     }
@@ -38,7 +37,7 @@ class CamerasAdapter(
 
     inner class CamerasViewHolder(private val binding: ItemCameraBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(camera: CameraDto) {
+        fun bind(camera: CameraModel) {
             with(binding) {
                 ivImage.load(camera.image)
                 tvTitle.text = camera.name
@@ -54,7 +53,6 @@ class CamerasAdapter(
                 }
             }
             itemView.setOnClickListener {
-//                onItemClick()
             }
         }
     }

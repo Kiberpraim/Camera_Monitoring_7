@@ -5,7 +5,9 @@ import androidx.room.Room
 import com.geeks.camera_monitoring_7.data.local.db.CameraDao
 import com.geeks.camera_monitoring_7.data.local.db.DoorDao
 import com.geeks.camera_monitoring_7.data.local.db.HouseDatabase
-import com.geeks.camera_monitoring_7.data.local.remoute.HouseApiService
+import com.geeks.camera_monitoring_7.data.remoute.HouseApiService
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,6 +15,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -31,9 +34,25 @@ object AppModule {
 
 
     @Provides
-    fun provideRetrofit(): Retrofit =
-        Retrofit.Builder().baseUrl("http://cars.cprogroup.ru/api/rubetek/")
-            .addConverterFactory(GsonConverterFactory.create()).build()
+    fun provideRetrofit(): Retrofit {
+
+        val interceptor = HttpLoggingInterceptor()
+            .setLevel(HttpLoggingInterceptor.Level.BODY)
+
+        val okHttpClient =
+            OkHttpClient().newBuilder()
+                .connectTimeout(20, TimeUnit.SECONDS)
+                .writeTimeout(20, TimeUnit.SECONDS)
+                .readTimeout(20, TimeUnit.SECONDS)
+                .addInterceptor(interceptor)
+                .build()
+
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("http://cars.cprogroup.ru/api/rubetek/")
+            .client(okHttpClient)
+            .build()
+    }
 
     @Provides
     fun provideHouseApiService(retrofit: Retrofit): HouseApiService =

@@ -17,6 +17,9 @@ interface DoorDao {
     fun insertDoor(door: DoorDto)
 
     @Update
+    fun updateAllDoors(doors: List<DoorDto>)
+
+    @Update
     fun updateDoor(door: DoorDto)
 
     @Delete

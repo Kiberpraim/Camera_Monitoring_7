@@ -6,16 +6,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import coil.load
-import com.geeks.camera_monitoring_7.data.dtos.DoorDto
 import com.geeks.camera_monitoring_7.databinding.ItemDoorBinding
+import com.geeks.camera_monitoring_7.domain.models.DoorModel
+import com.geeks.camera_monitoring_7.domain.utils.Constants.EMPTY_STRING
 
 class DoorsAdapter(
-//    private val onItemClick: () -> Unit
 ) : Adapter<DoorsAdapter.DoorsViewHolder>() {
 
-    private var list: List<DoorDto> = listOf()
+    private var list: List<DoorModel> = listOf()
 
-    fun setList(newList: List<DoorDto>) {
+    fun setList(newList: List<DoorModel>) {
         list = newList
         notifyDataSetChanged()
     }
@@ -38,11 +38,11 @@ class DoorsAdapter(
 
     inner class DoorsViewHolder(private val binding: ItemDoorBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(door: DoorDto) {
+        fun bind(door: DoorModel) {
             with(binding) {
                 tvTitle.text = door.name
 
-                if (door.image != "") {
+                if (door.image != EMPTY_STRING) {
                     ivImage.load(door.image)
                     ivImage.visibility = View.VISIBLE
                     if (door.favorites) {
@@ -60,7 +60,6 @@ class DoorsAdapter(
                 }
             }
             itemView.setOnClickListener {
-//                onItemClick()
             }
         }
     }

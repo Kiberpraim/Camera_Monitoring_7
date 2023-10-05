@@ -11,10 +11,13 @@ import com.geeks.camera_monitoring_7.data.dtos.CameraDto
 interface CameraDao {
 
     @Query("SELECT * FROM camera_table")
-    fun getAllCamera(): List<CameraDto>
+    fun getAllCameras(): List<CameraDto>
 
     @Insert
     fun insertCamera(camera: CameraDto)
+
+    @Update
+    fun updateAllCameras(cameras: List<CameraDto>)
 
     @Update
     fun updateCamera(camera: CameraDto)
