@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.lifecycleScope
 import com.geeks.camera_monitoring_7.databinding.FragmentCamerasBinding
-import com.geeks.camera_monitoring_7.domain.utils.Resource
+import com.geeks.camera_monitoring_7.presentation.UiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -34,25 +34,31 @@ class CamerasFragment : Fragment() {
 
         binding.recyclerView.adapter = adapter
 
-        getData()
+        initView()
         initRefreshData()
+
+        viewModel.getAllCameras()
     }
 
-    private fun getData() {
-        viewModel.viewModelScope.launch {
-            viewModel.getAllCameras().collect { result ->
+    private fun initView() {
+        lifecycleScope.launch {
+            viewModel.camerasList.collect { result ->
                 when (result) {
+                    is UiState.Loading -> binding.progressBar.visibility = View.VISIBLE
 
-                    is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
-
-                    is Resource.Error -> {
-                        Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
+                    is UiState.Success -> {
+                        adapter.setList(result.data!!)
                         binding.progressBar.visibility = View.GONE
                     }
 
-                    is Resource.Success -> {
-                        adapter.setList(result.data!!)
+                    is UiState.Empty -> {
                         binding.progressBar.visibility = View.GONE
+                        Toast.makeText(requireContext(), "Not found.", Toast.LENGTH_SHORT).show()
+                    }
+
+                    is UiState.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -61,7 +67,7 @@ class CamerasFragment : Fragment() {
 
     private fun initRefreshData() {
         binding.swipeRefreshLayout.setOnRefreshListener {
-            getData()
+            viewModel.getAllCameras()
             binding.swipeRefreshLayout.isRefreshing = false
         }
     }
