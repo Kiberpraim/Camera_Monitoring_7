@@ -1,4 +1,4 @@
-package com.geeks.camera_monitoring_7.presentation
+package com.geeks.camera_monitoring_7.presentation.utils
 
 sealed class UiState<T>(
     val data: T? = null,

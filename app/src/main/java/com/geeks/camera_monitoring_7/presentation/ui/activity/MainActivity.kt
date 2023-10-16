@@ -3,7 +3,6 @@ package com.geeks.camera_monitoring_7.presentation.ui.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.geeks.camera_monitoring_7.databinding.ActivityMainBinding
-import com.geeks.camera_monitoring_7.presentation.ui.activity.adapter.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 

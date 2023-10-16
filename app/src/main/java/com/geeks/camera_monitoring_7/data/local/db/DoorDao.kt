@@ -11,10 +11,13 @@ import com.geeks.camera_monitoring_7.data.dtos.DoorDto
 interface DoorDao {
 
     @Query("SELECT * FROM door_table")
-    fun getAllDoor(): List<DoorDto>
+    fun getAllDoors(): List<DoorDto>
 
     @Insert
     fun insertDoor(door: DoorDto)
+
+    @Insert
+    fun insertAllDoors(doors: List<DoorDto>)
 
     @Update
     fun updateAllDoors(doors: List<DoorDto>)

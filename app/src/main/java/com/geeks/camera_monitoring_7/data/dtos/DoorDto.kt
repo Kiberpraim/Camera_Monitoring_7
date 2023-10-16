@@ -3,7 +3,7 @@ package com.geeks.camera_monitoring_7.data.dtos
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.geeks.camera_monitoring_7.domain.models.DoorModel
-import com.geeks.camera_monitoring_7.domain.utils.Constants.EMPTY_STRING
+import com.geeks.camera_monitoring_7.data.utils.Constants.EMPTY_STRING
 import com.google.gson.annotations.SerializedName
 
 data class DoorsDto(
@@ -22,15 +22,11 @@ data class DoorDto(
     val image: String = EMPTY_STRING
 )
 
-fun DoorDto.toDomainModel() = DoorModel(id, favorites, name, room, image)
+fun DoorDto.toDomainModel() =
+    DoorModel(id, favorites, name, room ?: EMPTY_STRING, image ?: EMPTY_STRING)
+
 fun DoorModel.toDataDto() = DoorDto(id, favorites, name, room, image)
 
-fun List<DoorDto>.toDomainModel() = this.map { door ->
-    DoorModel(
-        id = door.id,
-        favorites = door.favorites,
-        name = door.name,
-        room = door.room ?: EMPTY_STRING,
-        image = door.image ?: EMPTY_STRING
-    )
-}
+fun List<DoorDto>.toDomainModel() = this.map { it.toDomainModel() }
+
+fun List<DoorModel>.toDataDto() = this.map { it.toDataDto() }

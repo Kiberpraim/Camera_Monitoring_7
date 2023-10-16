@@ -1,46 +1,37 @@
 package com.geeks.camera_monitoring_7.presentation.ui.fragment.cameras
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.geeks.camera_monitoring_7.R
+import com.geeks.camera_monitoring_7.data.utils.Constants.NOT_FOUND
 import com.geeks.camera_monitoring_7.databinding.FragmentCamerasBinding
-import com.geeks.camera_monitoring_7.presentation.UiState
+import com.geeks.camera_monitoring_7.presentation.base.BaseFragment
+import com.geeks.camera_monitoring_7.presentation.utils.UiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CamerasFragment : Fragment() {
+class CamerasFragment :
+    BaseFragment<FragmentCamerasBinding, CamerasViewModel>(R.layout.fragment_cameras) {
 
-    private var _binding: FragmentCamerasBinding? = null
-    private val binding get() = _binding!!
-    private val viewModel: CamerasViewModel by viewModels()
+    override val viewModel: CamerasViewModel by viewModels()
     private val adapter = CamerasAdapter()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentCamerasBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentCamerasBinding.inflate(inflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun initView() {
+        super.initView()
         binding.recyclerView.adapter = adapter
-
-        initView()
-        initRefreshData()
-
         viewModel.getAllCameras()
     }
 
-    private fun initView() {
+    override fun initLiveData() {
+        super.initLiveData()
         lifecycleScope.launch {
             viewModel.camerasList.collect { result ->
                 when (result) {
@@ -53,7 +44,7 @@ class CamerasFragment : Fragment() {
 
                     is UiState.Empty -> {
                         binding.progressBar.visibility = View.GONE
-                        Toast.makeText(requireContext(), "Not found.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), NOT_FOUND, Toast.LENGTH_SHORT).show()
                     }
 
                     is UiState.Error -> {
@@ -65,15 +56,11 @@ class CamerasFragment : Fragment() {
         }
     }
 
-    private fun initRefreshData() {
+    override fun initClick() {
+        super.initClick()
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getAllCameras()
+            viewModel.refreshCameras()
             binding.swipeRefreshLayout.isRefreshing = false
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

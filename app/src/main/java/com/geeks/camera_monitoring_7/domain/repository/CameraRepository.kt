@@ -6,11 +6,17 @@ import kotlinx.coroutines.flow.Flow
 
 interface CameraRepository {
 
-    suspend fun getAllCameras(): Flow<Resource<List<CameraModel>>>
+    suspend fun getRemoteCameras(): Flow<Resource<List<CameraModel>>>
+
+    fun getLocalCameras(): List<CameraModel>
 
     fun insertCamera(cameraModel: CameraModel)
 
+    fun insertLocalCameras(cameraModels: List<CameraModel>)
+
     fun updateCamera(cameraModel: CameraModel)
+
+    fun updateLocalCameras(cameraModels: List<CameraModel>)
 
     fun deleteCamera(cameraModel: CameraModel)
 }

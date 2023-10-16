@@ -1,46 +1,36 @@
 package com.geeks.camera_monitoring_7.presentation.ui.fragment.doors
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.geeks.camera_monitoring_7.R
+import com.geeks.camera_monitoring_7.data.utils.Constants.NOT_FOUND
 import com.geeks.camera_monitoring_7.databinding.FragmentDoorsBinding
-import com.geeks.camera_monitoring_7.presentation.UiState
+import com.geeks.camera_monitoring_7.presentation.base.BaseFragment
+import com.geeks.camera_monitoring_7.presentation.utils.UiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class DoorsFragment : Fragment() {
+class DoorsFragment : BaseFragment<FragmentDoorsBinding, DoorsViewModel>(R.layout.fragment_doors) {
 
-    private var _binding: FragmentDoorsBinding? = null
-    private val binding get() = _binding!!
-    private val viewModel: DoorsViewModel by viewModels()
+    override val viewModel: DoorsViewModel by viewModels()
     private val adapter = DoorsAdapter()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentDoorsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentDoorsBinding.inflate(layoutInflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun initView() {
+        super.initView()
         binding.recyclerView.adapter = adapter
-
-        initView()
-        initRefreshData()
-
         viewModel.getAllDoors()
     }
 
-    private fun initView() {
+    override fun initLiveData() {
+        super.initLiveData()
         lifecycleScope.launch {
             viewModel.doorsList.collect { result ->
                 when (result) {
@@ -53,7 +43,7 @@ class DoorsFragment : Fragment() {
 
                     is UiState.Empty -> {
                         binding.progressBar.visibility = View.GONE
-                        Toast.makeText(requireContext(), "Not found.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), NOT_FOUND, Toast.LENGTH_SHORT).show()
                     }
 
                     is UiState.Error -> {
@@ -65,15 +55,11 @@ class DoorsFragment : Fragment() {
         }
     }
 
-    private fun initRefreshData() {
+    override fun initClick() {
+        super.initClick()
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getAllDoors()
+            viewModel.refreshDoors()
             binding.swipeRefreshLayout.isRefreshing = false
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

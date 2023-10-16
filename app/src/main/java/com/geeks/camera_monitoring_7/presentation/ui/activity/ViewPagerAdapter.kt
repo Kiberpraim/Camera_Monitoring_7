@@ -1,4 +1,4 @@
-package com.geeks.camera_monitoring_7.presentation.ui.activity.adapter
+package com.geeks.camera_monitoring_7.presentation.ui.activity
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

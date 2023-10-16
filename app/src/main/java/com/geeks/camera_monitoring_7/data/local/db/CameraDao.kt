@@ -16,11 +16,14 @@ interface CameraDao {
     @Insert
     fun insertCamera(camera: CameraDto)
 
-    @Update
-    fun updateAllCameras(cameras: List<CameraDto>)
+    @Insert
+    fun insertAllCameras(cameras: List<CameraDto>)
 
     @Update
     fun updateCamera(camera: CameraDto)
+
+    @Update
+    fun updateAllCameras(cameras: List<CameraDto>)
 
     @Delete
     fun deleteCamera(camera: CameraDto)

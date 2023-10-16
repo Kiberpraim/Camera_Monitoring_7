@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import coil.load
 import com.geeks.camera_monitoring_7.databinding.ItemDoorBinding
 import com.geeks.camera_monitoring_7.domain.models.DoorModel
-import com.geeks.camera_monitoring_7.domain.utils.Constants.EMPTY_STRING
+import com.geeks.camera_monitoring_7.data.utils.Constants.EMPTY_STRING
 
 class DoorsAdapter(
 ) : Adapter<DoorsAdapter.DoorsViewHolder>() {
